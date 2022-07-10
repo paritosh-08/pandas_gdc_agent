@@ -28,3 +28,98 @@ agent.run_agent()
 
 When you run the `GDCAgent`, it starts a flask server and exposes the required
 endpoints explained [here](https://github.com/hasura/graphql-engine-mono/tree/main/dc-agents#implementing-data-connector-agents).
+
+## Run example
+
+The `example.py` uses the chinook database. To run the example, first create a
+virtual environment:
+
+``` bash
+python3 -m venv gdc_env 
+```
+
+Now, activate the virtual environment and install the requirements
+
+``` bash
+source gdc_env/bin/activate
+pip install -r requirements.txt
+```
+
+Next, start the GDC agent:
+``` bash
+python example.py
+```
+
+Now start a Hasura Graphql Engine:
+``` bash
+curl https://raw.githubusercontent.com/hasura/graphql-engine/stable/install-manifests/docker-compose/docker-compose.yaml -o docker-compose.yml
+
+docker-compose up
+```
+
+Now apply the following metadata:
+
+```
+POST /v1/metadata
+```
+
+``` json
+{
+  "type": "replace_metadata",
+  "args": {
+    "metadata": {
+      "version": 3,
+      "backend_configs": {
+        "dataconnector": {
+          "reference": {
+            "uri": "http://localhost:5000/"
+          }
+        }
+      },
+      "sources": [
+        {
+          "name": "chinook",
+          "kind": "reference",
+          "tables": [
+            {
+              "table": "Album",
+              "object_relationships": [
+                {
+                  "name": "Artist",
+                  "using": {
+                    "manual_configuration": {
+                      "remote_table": "Artist",
+                      "column_mapping": {
+                        "ArtistId": "ArtistId"
+                      }
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "table": "Artist",
+              "array_relationships": [
+                {
+                  "name": "Album",
+                  "using": {
+                    "manual_configuration": {
+                      "remote_table": "Album",
+                      "column_mapping": {
+                        "ArtistId": "ArtistId"
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          ],
+          "configuration": {
+            "tables": [ "Artist", "Album" ]
+          }
+        }
+      ]
+    }
+  }
+}
+```
