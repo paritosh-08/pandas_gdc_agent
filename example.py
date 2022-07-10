@@ -1,5 +1,5 @@
 import pandas as pd
-from pandas_GDC_agent import GDCAgent
+from pandas_gdc_agent import GDCAgent
 
 # setting up dataframes
 df1 = pd.read_csv('chinook/Artist.csv')

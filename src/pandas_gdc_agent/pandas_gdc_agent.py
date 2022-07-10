@@ -2,13 +2,15 @@ import ast
 from threading import Thread
 import flask
 from flask import request, jsonify, Response, send_file
-from gdc_agent_utils import getQuery, serializeDtype
+from .gdc_agent_utils import getQuery, serializeDtype
 import pandas as pd
 from typing import List, Tuple
 import json
 
 class GDCAgent:
 	agent_dfs = dict() # This will have all the dataframes
+
+	schema = None
 
 	# Constructor method. This will do the following:
 	#	1. populate `agent_dfs`
@@ -36,9 +38,8 @@ class GDCAgent:
 			}
 			tables.append(t_dict)
 			self.agent_dfs[t_name] = df
-		json_object = json.dumps({"tables": tables}, indent = 4)
-		with open("schema.json", "w") as outfile:
-			outfile.write(json_object)
+		print(self.schema)
+		self.schema = json.dumps({"tables": tables}, indent=4)
 
 	# This is the flask app that will be used in `run_agent`
 	app = flask.Flask(__name__)
@@ -56,7 +57,7 @@ class GDCAgent:
 
 		@self.app.route('/schema', methods=['GET'])
 		def schema():
-			return send_file('schema.json')
+			return self.schema
 
 		@self.app.route('/health', methods=['GET'])
 		def health():
@@ -71,7 +72,7 @@ class GDCAgent:
 			table_relationships = req["table_relationships"] if "table_relationships" in req else []
 			query_request = req['query']
 			query_output = getQuery(df, query_request, table_relationships, self.agent_dfs)
-			return(jsonify(query_output))
+			return jsonify(query_output)
 		
 		t = Thread(target=self.app.run)
 		t.start()
