@@ -7,6 +7,8 @@ To quickly get started, please go through a sample app in `example.py`.
 
 ## GDCAgent
 
+Link to pip package: https://pypi.org/project/pandas-gdc-agent/
+
 The `GDCAgent` constructor takes a list of tuples, where the first element
 is the table name and the second element is the `DataFrame` which corresponds
 to the table name. To setup a `GDCAgent`, run the following:
