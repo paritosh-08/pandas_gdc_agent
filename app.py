@@ -1,15 +1,14 @@
 import pandas as pd
-from hasura_GDC_agent import GDCAgent
+from pandas_GDC_agent import GDCAgent
 
-if __name__ == "__main__":
-	# setting up dataframes
-	df1 = pd.read_csv('chinook/Artist.csv')
-	df1.set_index("Id", inplace=True)
-	df2 = pd.read_csv("chinook/Album.csv")
-	df2.set_index("Id", inplace=True)
+# setting up dataframes
+df1 = pd.read_csv('chinook/Artist.csv')
+df1.set_index("Id", inplace=True)
+df2 = pd.read_csv("chinook/Album.csv")
+df2.set_index("Id", inplace=True)
 
-	# setting up GDC Agent
-	agent = GDCAgent([("Artist",df1),("Album", df2)])
-	
-	# running the GDC Agent
-	agent.run_agent()
+# setting up GDC Agent
+agent = GDCAgent([("Artist",df1),("Album", df2)])
+
+# running the GDC Agent
+agent.run_agent()
