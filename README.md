@@ -1,4 +1,6 @@
-# pandas_gdc_agent
+# Pandas GDC Agent
+
+![PyPI](https://img.shields.io/pypi/v/pandas-gdc-agent?color=green&label=release)
 
 This project explores the Hasura Graphql Data Connectors (GDC) using pandas
 Dataframe as backend.
