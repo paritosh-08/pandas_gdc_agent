@@ -29,7 +29,7 @@ agent.run_agent()
 ```
 
 When you run the `GDCAgent`, it starts a flask server and exposes the required
-endpoints explained [here](https://github.com/hasura/graphql-engine-mono/tree/main/dc-agents#implementing-data-connector-agents).
+endpoints explained [here](https://github.com/hasura/graphql-engine/tree/master/dc-agents#implementing-data-connector-agents).
 
 ## Run example
 

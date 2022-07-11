@@ -5,7 +5,6 @@ from flask import request, jsonify, Response, send_file
 from .gdc_agent_utils import getQuery, serializeDtype
 import pandas as pd
 from typing import List, Tuple
-import json
 
 class GDCAgent:
 	agent_dfs = dict() # This will have all the dataframes
@@ -39,7 +38,7 @@ class GDCAgent:
 			tables.append(t_dict)
 			self.agent_dfs[t_name] = df
 		print(self.schema)
-		self.schema = json.dumps({"tables": tables}, indent=4)
+		self.schema = {"tables": tables}
 
 	# This is the flask app that will be used in `run_agent`
 	app = flask.Flask(__name__)
@@ -57,7 +56,7 @@ class GDCAgent:
 
 		@self.app.route('/schema', methods=['GET'])
 		def schema():
-			return self.schema
+			return jsonify(self.schema)
 
 		@self.app.route('/health', methods=['GET'])
 		def health():
